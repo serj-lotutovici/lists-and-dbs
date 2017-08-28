@@ -1,0 +1,33 @@
+apply plugin: 'com.android.application'
+
+android {
+  compileSdkVersion versions.androidSdk
+  buildToolsVersion versions.androidBuildTools
+
+  defaultConfig {
+    applicationId "com.serjltt.listsdbs"
+
+    minSdkVersion versions.androidMinSdk
+    targetSdkVersion versions.androidTargetSdk
+
+    versionCode 1
+    versionName "1.0"
+
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+    }
+  }
+}
+
+dependencies {
+  implementation libraries.supportAppCompat
+
+  testImplementation libraries.junit
+
+  androidTestImplementation libraries.supportTestRunner
+  androidTestImplementation libraries.espresso
+}
