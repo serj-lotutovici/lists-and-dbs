@@ -25,6 +25,7 @@ android {
 
 dependencies {
   implementation libraries.supportAppCompat
+  implementation project(':service:github')
 
   testImplementation libraries.junit
 

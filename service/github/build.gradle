@@ -1,0 +1,26 @@
+apply plugin: 'net.ltgt.apt-idea'
+apply plugin: 'java-library'
+
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
+
+dependencies {
+  api libraries.supportAnnotations
+  api libraries.rx.core
+  api libraries.okhttp.core
+  api libraries.retrofit.core
+  api libraries.retrofit.rxjava
+  api libraries.retrofit.moshi
+  api libraries.moshi.core
+  api libraries.moshi.lazy
+
+  apt libraries.autoValue.core
+  compileOnly libraries.autoValue.annotations
+
+  apt libraries.moshi.autoValue
+  compileOnly libraries.moshi.annotations
+
+  testImplementation libraries.junit
+  testImplementation libraries.assertJ
+  testImplementation libraries.okhttp.mockwebserver
+}

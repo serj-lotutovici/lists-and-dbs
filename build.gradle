@@ -3,10 +3,12 @@ buildscript {
   repositories {
     google()
     jcenter()
+    maven { url "https://plugins.gradle.org/m2/" }
   }
 
   dependencies {
     classpath 'com.android.tools.build:gradle:3.0.0-beta3'
+    classpath 'net.ltgt.gradle:gradle-apt-plugin:0.11'
   }
 }
 
@@ -30,16 +32,56 @@ project.ext {
       androidTargetSdk : 25,
       androidSupport   : '25.4.0',
 
+      rxjava           : '2.1.0',
+
+      retrofit         : '2.3.0',
+      okhttp           : '3.8.1',
+
+      autoValueMoshi   : '0.4.3',
+      moshi            : '1.5.0',
+
+      autoValue        : '1.5',
+
       junit            : '4.12',
+      assertJ          : '2.6.0',
       supportTest      : '1.0.0',
       espresso         : '3.0.0',
   ]
 
   libraries = [
-      supportAppCompat : "com.android.support:appcompat-v7:$versions.androidSupport",
+      supportAppCompat  : "com.android.support:appcompat-v7:$versions.androidSupport",
+      supportAnnotations: "com.android.support:support-annotations:$versions.androidSupport",
 
-      junit            : "junit:junit:$versions.junit",
-      supportTestRunner: "com.android.support.test:runner:$versions.supportTest",
-      espresso         : "com.android.support.test.espresso:espresso-core:$versions.espresso"
+      rx                : [
+          core: "io.reactivex.rxjava2:rxjava:$versions.rxjava"
+      ],
+
+      retrofit          : [
+          core  : "com.squareup.retrofit2:retrofit:$versions.retrofit",
+          rxjava: "com.squareup.retrofit2:adapter-rxjava2:$versions.retrofit",
+          moshi : "com.squareup.retrofit2:converter-moshi:$versions.retrofit"
+      ],
+
+      okhttp            : [
+          core         : "com.squareup.okhttp3:okhttp:$versions.okhttp",
+          mockwebserver: "com.squareup.okhttp3:mockwebserver:$versions.okhttp"
+      ],
+
+      moshi             : [
+          core       : "com.squareup.moshi:moshi:$versions.moshi",
+          autoValue  : "com.ryanharter.auto.value:auto-value-moshi:$versions.autoValueMoshi",
+          annotations: "com.ryanharter.auto.value:auto-value-moshi-annotations:$versions.autoValueMoshi",
+          lazy       : "com.serjltt.moshi:moshi-lazy-adapters:2.0",
+      ],
+
+      autoValue         : [
+          core       : "com.google.auto.value:auto-value:$versions.autoValue",
+          annotations: "com.jakewharton.auto.value:auto-value-annotations:$versions.autoValue"
+      ],
+
+      junit             : "junit:junit:$versions.junit",
+      assertJ           : "org.assertj:assertj-core:$versions.assertJ",
+      supportTestRunner : "com.android.support.test:runner:$versions.supportTest",
+      espresso          : "com.android.support.test.espresso:espresso-core:$versions.espresso"
   ]
 }
