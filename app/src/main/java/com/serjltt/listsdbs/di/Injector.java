@@ -1,5 +1,6 @@
 package com.serjltt.listsdbs.di;
 
+import com.serjltt.listsdbs.data.NetworkModule;
 import com.serjltt.listsdbs.rx.RxModule;
 import dagger.Component;
 
@@ -7,7 +8,8 @@ import dagger.Component;
 @AppScope @Component(
     modules = {
         PlatformModule.class,
-        RxModule.class
+        RxModule.class,
+        NetworkModule.class
     }
 )
 public interface Injector {

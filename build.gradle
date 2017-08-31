@@ -70,6 +70,7 @@ project.ext {
 
       okhttp            : [
           core         : "com.squareup.okhttp3:okhttp:$versions.okhttp",
+          logging      : "com.squareup.okhttp3:logging-interceptor:$versions.okhttp",
           mockwebserver: "com.squareup.okhttp3:mockwebserver:$versions.okhttp"
       ],
 

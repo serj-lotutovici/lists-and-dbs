@@ -31,6 +31,8 @@ dependencies {
 
   implementation libraries.rx.android
 
+  implementation libraries.okhttp.logging
+
   implementation libraries.dagger.core
   annotationProcessor libraries.dagger.compiler
 
