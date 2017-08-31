@@ -2,6 +2,8 @@ package com.serjltt.listsdbs.repos.usecase;
 
 import com.serjltt.listsdbs.data.api.GithubService;
 import com.serjltt.listsdbs.data.api.model.GithubRepository;
+import com.serjltt.listsdbs.data.db.LocalService;
+import com.serjltt.listsdbs.data.db.model.LocalRepository;
 import com.serjltt.listsdbs.data.model.Repository;
 import io.reactivex.subjects.SingleSubject;
 import java.util.Collections;
@@ -16,23 +18,28 @@ import org.mockito.runners.MockitoJUnitRunner;
 import retrofit2.Response;
 import retrofit2.adapter.rxjava2.Result;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public final class GetReposUseCaseTest {
   @Mock private GithubService githubService;
+  @Mock private LocalService localService;
 
-  private SingleSubject<Result<List<GithubRepository>>> serviceSubject;
+  private SingleSubject<Result<List<GithubRepository>>> githubServiceSubject;
+  private SingleSubject<List<LocalRepository>> localServiceSubject;
+
   private GetReposUseCase useCase;
 
   @Before public void setUp() throws Exception {
-    serviceSubject = SingleSubject.create();
+    githubServiceSubject = SingleSubject.create();
     when(githubService.jakesRepositories(anyInt(), anyInt()))
-        .thenReturn(serviceSubject);
+        .thenReturn(githubServiceSubject);
 
-    useCase = new RealGetReposUseCase(githubService);
+    localServiceSubject = SingleSubject.create();
+    when(localService.repositories()).thenReturn(localServiceSubject);
+
+    useCase = new RealGetReposUseCase(githubService, localService);
   }
 
   @Test public void useCaseHandlesSuccessResult() throws Exception {
@@ -40,80 +47,57 @@ public final class GetReposUseCaseTest {
         Response.success(Collections.<GithubRepository>emptyList());
     Result<List<GithubRepository>> result = Result.response(response);
 
-    serviceSubject.onSuccess(result);
+    githubServiceSubject.onSuccess(result);
 
     useCase.getRepos(1)
         .test()
         .assertNoErrors()
         .assertValueCount(1)
-        .assertValue(
-            GetReposResult.builder()
-                .isError(false)
-                .isOffline(false)
-                .body(Collections.<Repository>emptyList())
-                .build()
-        );
+        .assertValue(GetReposResult.success(Collections.<Repository>emptyList()));
   }
 
-  @Test public void useCaseHandlesErrorResult() throws Exception {
+  @Test public void useCaseHandlesErrorResultWithLocalCall() throws Exception {
     //noinspection ThrowableNotThrown
     Exception expected = new Exception("Some exception");
     Result<List<GithubRepository>> result = Result.error(expected);
 
-    serviceSubject.onSuccess(result);
+    githubServiceSubject.onSuccess(result);
+
+    localServiceSubject.onSuccess(Collections.<LocalRepository>emptyList());
 
     useCase.getRepos(1)
         .test()
         .assertNoErrors()
         .assertValueCount(1)
-        .assertValue(
-            GetReposResult.builder()
-                .isError(true)
-                .isOffline(false)
-                .error(expected)
-                .build()
-        );
+        .assertValue(GetReposResult.offline(Collections.<Repository>emptyList()));
   }
 
-  @Test public void useCaseHandlesFailedResponse() throws Exception {
+  @Test public void useCaseHandlesFailedResponseWithOfflineCall() throws Exception {
     Response<List<GithubRepository>> response =
         Response.error(401, ResponseBody.create(MediaType.parse("text"), "Failure!"));
     Result<List<GithubRepository>> result = Result.response(response);
 
-    serviceSubject.onSuccess(result);
+    githubServiceSubject.onSuccess(result);
+    localServiceSubject.onSuccess(Collections.<LocalRepository>emptyList());
 
-    // Exceptions are not serializable and don't implement equals().
-    GetReposResult getReposResult = useCase.getRepos(1)
+    useCase.getRepos(1)
         .test()
         .assertNoErrors()
         .assertValueCount(1)
-        .values()
-        .get(0);
-
-    assertThat(getReposResult.isError()).isTrue();
-    assertThat(getReposResult.isOffline()).isFalse();
-    assertThat(getReposResult.body()).isNull();
-    assertThat(getReposResult.error())
-        .isInstanceOf(Exception.class)
-        .hasMessage("Failure!");
+        .assertValue(GetReposResult.offline(Collections.<Repository>emptyList()));
   }
 
   @Test public void useCaseRecoversFromStreamError() throws Exception {
     //noinspection ThrowableNotThrown
     Exception expected = new Exception("Test exception");
 
-    serviceSubject.onError(expected);
+    githubServiceSubject.onError(expected);
+    localServiceSubject.onError(expected);
 
     useCase.getRepos(1)
         .test()
         .assertNoErrors()
         .assertValueCount(1)
-        .assertValue(
-            GetReposResult.builder()
-                .isError(true)
-                .isOffline(false)
-                .error(expected)
-                .build()
-        );
+        .assertValue(GetReposResult.error(expected));
   }
 }

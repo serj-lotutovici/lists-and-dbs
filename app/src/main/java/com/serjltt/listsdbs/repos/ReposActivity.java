@@ -8,6 +8,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import butterknife.BindView;
 import com.serjltt.listsdbs.R;
+import com.serjltt.listsdbs.data.db.LocalDatabase;
 import com.serjltt.listsdbs.di.Injector;
 import com.serjltt.listsdbs.di.InjectorActivity;
 import com.serjltt.listsdbs.mvi.MviPresenter;
@@ -23,6 +24,7 @@ public class ReposActivity extends InjectorActivity implements ReposView {
   @BindView(R.id.progress_view) ProgressBar progressView;
 
   @Inject MviPresenter<ReposView> presenter;
+  @Inject LocalDatabase localDatabase; // A better place would be the presenter's on dispose method.
 
   private Disposable disposable;
 
@@ -51,6 +53,7 @@ public class ReposActivity extends InjectorActivity implements ReposView {
 
   @Override protected void onDestroy() {
     disposable.dispose();
+    localDatabase.close();
     super.onDestroy();
   }
 
@@ -68,14 +71,16 @@ public class ReposActivity extends InjectorActivity implements ReposView {
       toast("Error loading list: " + model.error().getMessage());
     } else {
       // If it's the first page set the date, otherwise add.
-      if (model.page() == 1) {
-        adapter.set(model.data());
-      } else {
-        adapter.add(model.data());
-      }
 
       if (model.isOffline()) {
         toast("Showing offline data.");
+        adapter.set(model.data());
+      } else {
+        if (model.page() == 1) {
+          adapter.set(model.data());
+        } else {
+          adapter.add(model.data());
+        }
       }
     }
   }

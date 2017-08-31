@@ -24,7 +24,7 @@ public final class LocalMappersTest {
     User expectedUser = User.create(login, avatar);
     Repository expectedRepo = Repository.create(repoName, description, expectedUser);
 
-    assertThat(LocalMappers.REPOSITORY_MAPPER.apply(inputRepo))
+    assertThat(LocalMappers.FROM_LOCAL_MAPPER.apply(inputRepo))
         .isEqualTo(expectedRepo);
   }
 }

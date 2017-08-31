@@ -7,6 +7,7 @@ import dagger.Subcomponent;
 @ViewScope @Subcomponent(
     modules = {
         DataModule.class,
+        ReposModule.class,
         ReposBindingModule.class
     }
 )

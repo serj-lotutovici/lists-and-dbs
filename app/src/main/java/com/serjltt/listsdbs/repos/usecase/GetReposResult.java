@@ -6,8 +6,32 @@ import com.serjltt.listsdbs.data.model.Repository;
 import java.util.List;
 
 @AutoValue public abstract class GetReposResult {
-  public static Builder builder() {
+  private static Builder builder() {
     return new AutoValue_GetReposResult.Builder();
+  }
+
+  public static GetReposResult success(List<Repository> repositories) {
+    return builder()
+        .isOffline(false)
+        .isError(false)
+        .body(repositories)
+        .build();
+  }
+
+  public static GetReposResult offline(List<Repository> repositories) {
+    return builder()
+        .isOffline(true)
+        .isError(false)
+        .body(repositories)
+        .build();
+  }
+
+  public static GetReposResult error(Throwable error) {
+    return builder()
+        .isError(true)
+        .isOffline(false)
+        .error(error)
+        .build();
   }
 
   public abstract boolean isError();

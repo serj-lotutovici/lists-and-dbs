@@ -42,14 +42,7 @@ public final class ReposPresenterTest {
     presenter.bind(reposView);
 
     viewStateSubject.onNext(ReposUiModel.init());
-
-    getReposSubject.onSuccess(
-        GetReposResult.builder()
-            .isError(false)
-            .isOffline(false)
-            .body(emptyList())
-            .build()
-    );
+    getReposSubject.onSuccess(GetReposResult.success(emptyList()));
 
     verify(reposView)
         .render(ReposUiModel.success(emptyList(), 1, false));
@@ -62,13 +55,7 @@ public final class ReposPresenterTest {
         ReposUiModel.success(emptyList(), 3, true)
     );
 
-    getReposSubject.onSuccess(
-        GetReposResult.builder()
-            .isError(false)
-            .isOffline(false)
-            .body(notEmptyList())
-            .build()
-    );
+    getReposSubject.onSuccess(GetReposResult.success(notEmptyList()));
 
     verify(getReposUseCase).getRepos(1);
     verify(reposView)
@@ -82,13 +69,7 @@ public final class ReposPresenterTest {
 
     //noinspection ThrowableNotThrown
     Exception expected = new Exception("test");
-    getReposSubject.onSuccess(
-        GetReposResult.builder()
-            .isError(true)
-            .isOffline(false)
-            .error(expected)
-            .build()
-    );
+    getReposSubject.onSuccess(GetReposResult.error(expected));
 
     verify(reposView)
         .render(ReposUiModel.error(expected, 1));
