@@ -45,6 +45,8 @@ project.ext {
 
       androidArch      : '1.0.0-alpha4',
 
+      dagger           : '2.10',
+
       junit            : '4.12',
       assertJ          : '2.6.0',
       supportTest      : '1.0.1',
@@ -93,6 +95,10 @@ project.ext {
           testing: "android.arch.core:core-testing:$versions.androidArch",
       ],
 
+      dagger            : [
+          core    : "com.google.dagger:dagger:${versions.dagger}",
+          compiler: "com.google.dagger:dagger-compiler:${versions.dagger}",
+      ],
 
       junit             : "junit:junit:$versions.junit",
       assertJ           : "org.assertj:assertj-core:$versions.assertJ",
