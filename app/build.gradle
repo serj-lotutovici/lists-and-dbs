@@ -40,7 +40,12 @@ dependencies {
   implementation libraries.butterknife.core
   annotationProcessor libraries.butterknife.compiler
 
+  annotationProcessor libraries.autoValue.core
+  compileOnly libraries.autoValue.annotations
+
   testImplementation libraries.junit
+  testImplementation libraries.assertJ
+  testImplementation libraries.mockito
 
   androidTestImplementation libraries.supportTestRunner
   androidTestImplementation libraries.espresso

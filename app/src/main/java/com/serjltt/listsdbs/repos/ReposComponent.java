@@ -1,12 +1,12 @@
 package com.serjltt.listsdbs.repos;
 
-import com.serjltt.listsdbs.data.DbModule;
+import com.serjltt.listsdbs.data.DataModule;
 import com.serjltt.listsdbs.di.ViewScope;
 import dagger.Subcomponent;
 
 @ViewScope @Subcomponent(
     modules = {
-        DbModule.class,
+        DataModule.class,
         ReposBindingModule.class
     }
 )

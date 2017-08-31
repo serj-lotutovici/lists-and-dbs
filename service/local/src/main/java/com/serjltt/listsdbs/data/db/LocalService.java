@@ -5,14 +5,14 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import com.serjltt.listsdbs.data.db.model.LocalRepository;
-import io.reactivex.Flowable;
+import io.reactivex.Single;
 import java.util.List;
 
 @Dao
 public interface LocalService {
   /** Observe all repositories. */
   @Query("SELECT * FROM repository")
-  Flowable<List<LocalRepository>> repositories();
+  Single<List<LocalRepository>> repositories();
 
   /** Add a new set of repositories. */
   @Insert(onConflict = OnConflictStrategy.REPLACE)

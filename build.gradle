@@ -43,7 +43,7 @@ project.ext {
 
       autoValue        : '1.5',
 
-      androidArch      : '1.0.0-alpha4',
+      androidArch      : '1.0.0-alpha5',
 
       dagger           : '2.10',
 
@@ -113,6 +113,7 @@ project.ext {
       ],
 
       junit            : "junit:junit:$versions.junit",
+      mockito          : 'org.mockito:mockito-all:1.10.19',
       assertJ          : "org.assertj:assertj-core:$versions.assertJ",
       supportTestRunner: "com.android.support.test:runner:$versions.supportTest",
       espresso         : "com.android.support.test.espresso:espresso-core:$versions.espresso"
