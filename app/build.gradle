@@ -24,9 +24,12 @@ android {
 }
 
 dependencies {
-  implementation libraries.supportAppCompat
   implementation project(':service:github')
   implementation project(':service:local')
+
+  implementation libraries.supportAppCompat
+
+  implementation libraries.rx.android
 
   implementation libraries.dagger.core
   annotationProcessor libraries.dagger.compiler
