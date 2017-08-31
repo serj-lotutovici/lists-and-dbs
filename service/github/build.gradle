@@ -7,7 +7,7 @@ targetCompatibility = JavaVersion.VERSION_1_7
 dependencies {
   api project(':service:common')
 
-  api libraries.supportAnnotations
+  api libraries.support.annotations
   api libraries.rx.core
   api libraries.okhttp.core
   api libraries.retrofit.core

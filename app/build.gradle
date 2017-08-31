@@ -27,7 +27,8 @@ dependencies {
   implementation project(':service:github')
   implementation project(':service:local')
 
-  implementation libraries.supportAppCompat
+  implementation libraries.support.appCompat
+  implementation libraries.support.recyclerView
 
   implementation libraries.rx.android
 
@@ -35,6 +36,9 @@ dependencies {
 
   implementation libraries.dagger.core
   annotationProcessor libraries.dagger.compiler
+
+  implementation libraries.butterknife.core
+  annotationProcessor libraries.butterknife.compiler
 
   testImplementation libraries.junit
 
