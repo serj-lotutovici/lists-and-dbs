@@ -6,13 +6,13 @@ import com.serjltt.listsdbs.data.model.Repository;
 import java.util.List;
 
 @AutoValue public abstract class GetReposResult {
-  static Builder builder() {
+  public static Builder builder() {
     return new AutoValue_GetReposResult.Builder();
   }
 
   public abstract boolean isError();
 
-  public abstract boolean hasOffline();
+  public abstract boolean isOffline();
 
   @Nullable public abstract List<Repository> body();
 
@@ -21,7 +21,7 @@ import java.util.List;
   @AutoValue.Builder public static abstract class Builder {
     public abstract Builder isError(boolean isError);
 
-    public abstract Builder hasOffline(boolean isOffline);
+    public abstract Builder isOffline(boolean isOffline);
 
     public abstract Builder body(@Nullable List<Repository> body);
 

@@ -7,17 +7,29 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import com.serjltt.listsdbs.R;
 import com.serjltt.listsdbs.data.model.Repository;
+import com.serjltt.listsdbs.rx.Ignore;
+import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * {@linkplain RecyclerView.Adapter} that is aware of list scrolls and requests more data when the
+ * list comes to and end.
+ *
+ * This is probably the ugliest code in the project, because adapter and view are so tied together.
+ */
 public final class RepoRecyclerAdapter extends RecyclerView.Adapter<ViewHolder> {
-  private static final int VISIBLE_THREASHOLD = 3;
+  private static final int VISIBLE_THRESHOLD = 3;
 
   private final List<Repository> repositories = new ArrayList<>();
   private final LayoutInflater inflater;
+
+  private boolean isLoadMore = true;
   private boolean isLoading = false;
 
-  private OnLoadMoreListener loadMoreListener;
+  // Using BehaviorSubject to cache the last result.
+  private final BehaviorSubject<Ignore> loadMoreSubject = BehaviorSubject.create();
 
   public RepoRecyclerAdapter(Activity activity, RecyclerView view) {
     inflater = LayoutInflater.from(activity);
@@ -30,19 +42,19 @@ public final class RepoRecyclerAdapter extends RecyclerView.Adapter<ViewHolder> 
         int totalItemCount = layoutManager.getItemCount();
         int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
 
-        if (!isLoading && totalItemCount <= (lastVisibleItem + VISIBLE_THREASHOLD)) {
-          if (loadMoreListener != null) {
-            repositories.add(null);
-            notifyItemInserted(repositories.size() - 1);
+        if (isLoadMore && !isLoading && totalItemCount <= (lastVisibleItem + VISIBLE_THRESHOLD)) {
+          repositories.add(null);
+          notifyItemInserted(repositories.size() - 1);
 
-            loadMoreListener.onLoadMore();
-          }
-
+          loadMoreSubject.onNext(Ignore.INSTANCE);
           isLoading = true;
         }
       }
     });
     view.setAdapter(this);
+
+    // Trigger load more, to notify that adapter requires data.
+    loadMoreSubject.onNext(Ignore.INSTANCE);
   }
 
   @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -77,8 +89,12 @@ public final class RepoRecyclerAdapter extends RecyclerView.Adapter<ViewHolder> 
     return repositories.get(position) != null ? ViewHolder.TYPE_REPO : ViewHolder.TYPE_LOADING;
   }
 
-  public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
-    this.loadMoreListener = onLoadMoreListener;
+  public void set(List<Repository> repositories) {
+    setLoaded();
+
+    this.repositories.clear();
+    this.repositories.addAll(repositories);
+    notifyDataSetChanged();
   }
 
   public void add(List<Repository> repositories) {
@@ -88,15 +104,17 @@ public final class RepoRecyclerAdapter extends RecyclerView.Adapter<ViewHolder> 
     notifyDataSetChanged();
   }
 
+  public Observable<Ignore> loadMoreStream() {
+    return loadMoreSubject;
+  }
+
   public void setLoaded() {
     if (isLoading) {
       int toRemove = repositories.size() - 1;
       repositories.remove(toRemove);
       notifyItemRemoved(toRemove);
     }
-  }
 
-  public void clear() {
-    loadMoreListener = null;
+    isLoading = false;
   }
 }

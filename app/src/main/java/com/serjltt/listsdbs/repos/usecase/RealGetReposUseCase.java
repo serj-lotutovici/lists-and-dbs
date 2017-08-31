@@ -58,7 +58,7 @@ public final class RealGetReposUseCase implements GetReposUseCase {
           @Override public GetReposResult apply(List<Repository> repositories) throws Exception {
             return GetReposResult.builder()
                 .isError(false)
-                .hasOffline(false)
+                .isOffline(false)
                 .body(repositories)
                 .build();
           }
@@ -67,7 +67,7 @@ public final class RealGetReposUseCase implements GetReposUseCase {
           @Override public GetReposResult apply(Throwable throwable) throws Exception {
             return GetReposResult.builder()
                 .isError(true)
-                .hasOffline(false)
+                .isOffline(false)
                 .error(throwable)
                 .build();
           }

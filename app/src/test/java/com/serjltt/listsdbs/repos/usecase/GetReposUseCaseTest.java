@@ -49,7 +49,7 @@ public final class GetReposUseCaseTest {
         .assertValue(
             GetReposResult.builder()
                 .isError(false)
-                .hasOffline(false)
+                .isOffline(false)
                 .body(Collections.<Repository>emptyList())
                 .build()
         );
@@ -69,7 +69,7 @@ public final class GetReposUseCaseTest {
         .assertValue(
             GetReposResult.builder()
                 .isError(true)
-                .hasOffline(false)
+                .isOffline(false)
                 .error(expected)
                 .build()
         );
@@ -91,7 +91,7 @@ public final class GetReposUseCaseTest {
         .get(0);
 
     assertThat(getReposResult.isError()).isTrue();
-    assertThat(getReposResult.hasOffline()).isFalse();
+    assertThat(getReposResult.isOffline()).isFalse();
     assertThat(getReposResult.body()).isNull();
     assertThat(getReposResult.error())
         .isInstanceOf(Exception.class)
@@ -111,7 +111,7 @@ public final class GetReposUseCaseTest {
         .assertValue(
             GetReposResult.builder()
                 .isError(true)
-                .hasOffline(false)
+                .isOffline(false)
                 .error(expected)
                 .build()
         );
