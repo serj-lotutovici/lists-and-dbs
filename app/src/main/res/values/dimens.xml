@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <dimen name="margin_list_item">8dp</dimen>
+  <dimen name="height_list_item">80dp</dimen>
+  <dimen name="size_list_item">60dp</dimen>
+</resources>
