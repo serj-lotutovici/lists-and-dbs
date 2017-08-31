@@ -23,7 +23,7 @@ task clean(type: Delete) {
   delete rootProject.buildDir
 }
 
-/** Define all libraries and versions used in the project. */
+/** Define all libraries and versions used in this project. */
 project.ext {
   versions = [
       androidSdk       : 25,
@@ -33,6 +33,7 @@ project.ext {
       androidSupport   : '25.4.0',
 
       rxjava           : '2.1.0',
+      rxinterop        : '0.10.2',
 
       retrofit         : '2.3.0',
       okhttp           : '3.8.1',
@@ -42,10 +43,12 @@ project.ext {
 
       autoValue        : '1.5',
 
+      androidArch      : '1.0.0-alpha4',
+
       junit            : '4.12',
       assertJ          : '2.6.0',
-      supportTest      : '1.0.0',
-      espresso         : '3.0.0',
+      supportTest      : '1.0.1',
+      espresso         : '3.0.1',
   ]
 
   libraries = [
@@ -53,7 +56,7 @@ project.ext {
       supportAnnotations: "com.android.support:support-annotations:$versions.androidSupport",
 
       rx                : [
-          core: "io.reactivex.rxjava2:rxjava:$versions.rxjava"
+          core: "io.reactivex.rxjava2:rxjava:$versions.rxjava",
       ],
 
       retrofit          : [
@@ -78,6 +81,18 @@ project.ext {
           core       : "com.google.auto.value:auto-value:$versions.autoValue",
           annotations: "com.jakewharton.auto.value:auto-value-annotations:$versions.autoValue"
       ],
+
+      androidArch       : [
+          room   : [
+              core    : "android.arch.persistence.room:runtime:$versions.androidArch",
+              compiler: "android.arch.persistence.room:compiler:$versions.androidArch",
+              testing : "android.arch.persistence.room:testing:$versions.androidArch",
+              rx      : "android.arch.persistence.room:rxjava2:$versions.androidArch",
+          ],
+
+          testing: "android.arch.core:core-testing:$versions.androidArch",
+      ],
+
 
       junit             : "junit:junit:$versions.junit",
       assertJ           : "org.assertj:assertj-core:$versions.assertJ",

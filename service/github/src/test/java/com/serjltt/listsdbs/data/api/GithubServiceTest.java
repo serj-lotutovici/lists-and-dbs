@@ -1,7 +1,7 @@
 package com.serjltt.listsdbs.data.api;
 
-import com.serjltt.listsdbs.data.api.model.Repository;
-import com.serjltt.listsdbs.data.api.model.User;
+import com.serjltt.listsdbs.data.api.model.GithubRepository;
+import com.serjltt.listsdbs.data.api.model.GithubUser;
 import com.squareup.moshi.JsonEncodingException;
 import com.squareup.moshi.Moshi;
 import java.util.List;
@@ -24,7 +24,7 @@ public final class GithubServiceTest {
 
   @Before public void setUp() throws Exception {
     Moshi moshi = new Moshi.Builder() //
-        .add(GithubAdapterFactory.create()) //
+        .add(GithubJsonAdapterFactory.create()) //
         .build();
 
     Retrofit retrofit = new Retrofit.Builder() //
@@ -39,7 +39,7 @@ public final class GithubServiceTest {
   @Test public void serviceReturnsSuccessResult() throws Exception {
     server.enqueue(new MockResponse().setBody(mockJson));
 
-    Result<List<Repository>> listResult = service.jakesRepositories(1, 15) //
+    Result<List<GithubRepository>> listResult = service.jakesRepositories(1, 15) //
         .test() //
         .assertNoErrors() //
         .assertValueCount(1) //
@@ -51,15 +51,15 @@ public final class GithubServiceTest {
     assertThat(listResult.response().isSuccessful()).isTrue();
 
     //noinspection ConstantConditions Same here.
-    List<Repository> body = listResult.response().body();
+    List<GithubRepository> body = listResult.response().body();
     //noinspection ConstantConditions And here.
-    Repository repository = body.get(0);
+    GithubRepository githubRepository = body.get(0);
 
-    assertThat(repository).isEqualTo( //
-        Repository.create( //
+    assertThat(githubRepository).isEqualTo( //
+        GithubRepository.create( //
             "abs.io", //
             "Simple URL shortener for ActionBarSherlock using node.js and express.", //
-            User.create( //
+            GithubUser.create( //
                 "JakeWharton", //
                 "https://avatars0.githubusercontent.com/u/66577?v=4") //
         ));
@@ -68,7 +68,7 @@ public final class GithubServiceTest {
   @Test public void serviceReturnsErrorResult() throws Exception {
     server.enqueue(new MockResponse().setBody("][")); //  This will make the parsing fail.
 
-    Result<List<Repository>> listResult = service.jakesRepositories(4, 42) //
+    Result<List<GithubRepository>> listResult = service.jakesRepositories(4, 42) //
         .test() //
         .assertNoErrors() //
         .assertValueCount(1) //

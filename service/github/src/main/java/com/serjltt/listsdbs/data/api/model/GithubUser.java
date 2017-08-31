@@ -8,13 +8,13 @@ import com.squareup.moshi.Json;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
-@AutoValue public abstract class User {
-  public static JsonAdapter<User> jsonAdapter(Moshi moshi) {
-    return new AutoValue_User.MoshiJsonAdapter(moshi);
+@AutoValue public abstract class GithubUser {
+  public static JsonAdapter<GithubUser> jsonAdapter(Moshi moshi) {
+    return new AutoValue_GithubUser.MoshiJsonAdapter(moshi);
   }
 
-  @VisibleForTesting public static User create(@NonNull String login, @Nullable String avatarUrl) {
-    return new AutoValue_User(login, avatarUrl);
+  @VisibleForTesting public static GithubUser create(@NonNull String login, @Nullable String avatarUrl) {
+    return new AutoValue_GithubUser(login, avatarUrl);
   }
 
   @NonNull public abstract String login();

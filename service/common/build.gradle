@@ -1,0 +1,12 @@
+apply plugin: 'net.ltgt.apt-idea'
+apply plugin: 'java-library'
+
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
+
+dependencies {
+  api libraries.supportAnnotations
+
+  apt libraries.autoValue.core
+  compileOnly libraries.autoValue.annotations
+}

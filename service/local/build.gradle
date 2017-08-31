@@ -1,0 +1,43 @@
+apply plugin: 'com.android.library'
+
+android {
+  compileSdkVersion versions.androidSdk
+  buildToolsVersion versions.androidBuildTools
+
+  defaultConfig {
+    minSdkVersion versions.androidMinSdk
+
+    versionCode 1
+    versionName "1.0"
+
+    testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_7
+    targetCompatibility JavaVersion.VERSION_1_7
+  }
+
+  packagingOptions {
+    exclude 'META-INF/rxjava.properties'
+  }
+}
+
+dependencies {
+  api project(':service:common')
+
+  api libraries.supportAnnotations
+  api libraries.rx.core
+  api libraries.androidArch.room.core
+
+  implementation libraries.androidArch.room.rx
+  annotationProcessor libraries.androidArch.room.compiler
+
+  testImplementation libraries.assertJ
+  testImplementation libraries.junit
+
+  androidTestImplementation libraries.androidArch.testing
+  androidTestImplementation libraries.androidArch.room.testing
+  androidTestImplementation libraries.supportTestRunner
+  androidTestImplementation libraries.assertJ
+}

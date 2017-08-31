@@ -1,4 +1,6 @@
 rootProject.name = 'lists-and-dbs'
 
 include ':app'
+include ':service:common'
 include ':service:github'
+include ':service:local'
